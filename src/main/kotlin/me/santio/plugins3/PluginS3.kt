@@ -1,6 +1,7 @@
 package me.santio.plugins3
 
 import io.minio.MinioClient
+import kotlin.system.exitProcess
 
 object PluginS3 {
     lateinit var client: MinioClient
@@ -36,7 +37,12 @@ object PluginS3 {
 
         System.clearProperty("STARTUP_CMD")
         println("Cleaned up, executing: $startupCmd")
-        Runtime.getRuntime().exec(startupCmd)
 
+        val process = Runtime.getRuntime().exec(startupCmd)
+
+        process.inputStream.copyTo(System.out)
+        process.errorStream.copyTo(System.err)
+
+        exitProcess(process.waitFor())
     }
 }
