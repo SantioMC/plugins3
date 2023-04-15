@@ -1,3 +1,5 @@
+package me.santio.plugins3
+
 import io.minio.MinioClient
 
 object PluginS3 {
@@ -19,6 +21,8 @@ object PluginS3 {
 
         val bucket = System.getenv("MINIO_BUCKET")
         val directory = System.getenv("MINIO_DIR")
+
+        println("Loading plugins from $bucket/$directory")
         PluginLoader.loadFromBucket(bucket, directory)
     }
 }

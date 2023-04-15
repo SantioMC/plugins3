@@ -1,3 +1,5 @@
+package me.santio.plugins3
+
 import io.minio.DownloadObjectArgs
 import io.minio.ListObjectsArgs
 
@@ -30,12 +32,11 @@ object PluginLoader {
             println("Downloaded plugin: $name")
         }
 
+        val startupCmd = System.getenv("STARTUP_CMD")
         println("Done, ready for server start")
+        println("Command executing: $startupCmd")
 
-        // TODO: Start server process
-//        val process = ProcessBuilder("java", "-jar", "server.jar")
-//            .inheritIO()
-//            .start()
+        Runtime.getRuntime().exec(startupCmd)
     }
 
 }
