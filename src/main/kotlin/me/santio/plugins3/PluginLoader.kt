@@ -2,10 +2,15 @@ package me.santio.plugins3
 
 import io.minio.DownloadObjectArgs
 import io.minio.ListObjectsArgs
+import java.io.File
 
 object PluginLoader {
 
     fun loadFromBucket(bucket: String, directory: String) {
+        val currentDir = File(System.getProperty("user.dir"))
+        val pluginsDir = File(currentDir, "plugins")
+        if (!pluginsDir.exists()) pluginsDir.mkdir()
+
         val objects = PluginS3.client.listObjects(
             ListObjectsArgs.builder()
                 .bucket(bucket)
@@ -25,18 +30,12 @@ object PluginLoader {
                 DownloadObjectArgs.builder()
                     .bucket(bucket)
                     .`object`(path)
-                    .filename(name)
+                    .filename(File(pluginsDir, name).absolutePath)
                     .build()
             )
 
             println("Downloaded plugin: $name")
         }
-
-        val startupCmd = System.getenv("STARTUP_CMD")
-        println("Done, ready for server start")
-        println("Command executing: $startupCmd")
-
-        Runtime.getRuntime().exec(startupCmd)
     }
 
 }

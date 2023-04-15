@@ -24,5 +24,19 @@ object PluginS3 {
 
         println("Loading plugins from $bucket/$directory")
         PluginLoader.loadFromBucket(bucket, directory)
+
+        println("Done, beginning clean up")
+        val startupCmd = System.getenv("STARTUP_CMD")
+
+        for (env in System.getenv().keys) {
+            if (env.startsWith("MINIO_")) {
+                System.clearProperty(env)
+            }
+        }
+
+        System.clearProperty("STARTUP_CMD")
+        println("Cleaned up, executing: $startupCmd")
+        Runtime.getRuntime().exec(startupCmd)
+
     }
 }
