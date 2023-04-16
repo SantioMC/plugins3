@@ -23,7 +23,7 @@ object PluginS3 {
         val bucket = System.getenv("MINIO_BUCKET")
         val directory = System.getenv("MINIO_DIR")
 
-        println("Loading plugins from $bucket/$directory")
+        println("Loading files from $bucket/$directory")
         PluginLoader.loadFromBucket(bucket, directory)
 
         println("Done, beginning clean up")
