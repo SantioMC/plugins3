@@ -3,8 +3,6 @@
 
 .idea/
 build/
-.gradle/
-gradle/
 
 # CMake
 cmake-build-*/
