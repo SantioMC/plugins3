@@ -2,6 +2,7 @@ package me.santio.plugins3
 
 import io.minio.DownloadObjectArgs
 import io.minio.ListObjectsArgs
+import io.minio.errors.MinioException
 import java.io.File
 
 object PluginLoader {
@@ -28,16 +29,23 @@ object PluginLoader {
             File(name).parentFile?.mkdirs()
 
             // Download file
-            PluginS3.client.downloadObject(
-                DownloadObjectArgs.builder()
-                    .bucket(bucket)
-                    .`object`(path)
-                    .filename(File(currentDir, name).absolutePath)
-                    .overwrite(true)
-                    .build()
-            )
+            try {
+                PluginS3.client.downloadObject(
+                    DownloadObjectArgs.builder()
+                        .bucket(bucket)
+                        .`object`(path)
+                        .filename(File(currentDir, name).absolutePath)
+                        .overwrite(true)
+                        .build()
+                )
 
-            println("$path -> $name")
+                println("$path -> $name")
+            } catch (e: MinioException) {
+                println("Failed to download $path")
+                e.printStackTrace()
+                println("HTTP Trace:")
+                println(e.httpTrace())
+            }
         }
     }
 
