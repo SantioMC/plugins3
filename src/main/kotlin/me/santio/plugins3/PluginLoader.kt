@@ -22,7 +22,7 @@ object PluginLoader {
             if (item.isDir) continue
 
             val path = item.objectName()
-            val name = path.substring(directory.length + 1)
+            val name = path.substring(if (directory.isNotEmpty()) directory.length + 1 else 0)
 
             // Create any directories that don't exist
             File(name).parentFile?.mkdirs()
