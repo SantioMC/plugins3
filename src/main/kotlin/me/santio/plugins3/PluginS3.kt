@@ -1,6 +1,7 @@
 package me.santio.plugins3
 
 import io.minio.MinioClient
+import java.io.File
 import kotlin.system.exitProcess
 
 object PluginS3 {
@@ -21,13 +22,22 @@ object PluginS3 {
         println("Connected to $endpoint")
 
         val bucket = System.getenv("MINIO_BUCKET")
-        val directory = System.getenv("MINIO_DIR")
+        val directory = System.getenv("MINIO_DIR") ?: ""
 
         println("Loading files from $bucket/$directory")
         PluginLoader.loadFromBucket(bucket, directory)
 
         println("Done, beginning clean up")
-        val startupCmd = System.getenv("STARTUP_CMD")
+        val startupCmd = System.getenv("STARTUP_CMD") ?: let {
+            val startupFile = File(".startup")
+
+            if (!startupFile.exists())
+                error("No startup command found, exiting")
+
+            startupFile.readText().also {
+                startupFile.delete()
+            }
+        }
 
         for (env in System.getenv().keys) {
             if (env.startsWith("MINIO_")) {

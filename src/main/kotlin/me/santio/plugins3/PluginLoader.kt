@@ -12,8 +12,8 @@ object PluginLoader {
         val objects = PluginS3.client.listObjects(
             ListObjectsArgs.builder()
                 .bucket(bucket)
-                .prefix("$directory/")
                 .recursive(true)
+                .also { if (directory.isNotEmpty()) it.prefix(directory) }
                 .build()
         )
 
