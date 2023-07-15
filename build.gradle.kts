@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("io.minio:minio:8.5.2")
+    implementation("io.minio:minio:8.5.4")
 }
 
 tasks.test {
